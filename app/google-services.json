@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "739676494248",
+    "project_id": "attendence-calculator-123",
+    "storage_bucket": "attendence-calculator-123.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:739676494248:android:4fd699b7fc05b4ac6d259d",
+        "android_client_info": {
+          "package_name": "com.rgukt.attend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "739676494248-fph4q1frv4sghjj8f108ec8bg7e95n3p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpNrwcqvU60vfOOuDofqkHIs70PHUad90"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "739676494248-fph4q1frv4sghjj8f108ec8bg7e95n3p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
