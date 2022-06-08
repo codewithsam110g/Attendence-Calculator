@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView16"
+        android:id="@+id/txt_it"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="This / That"
@@ -45,7 +45,7 @@
         app:layout_constraintVertical_bias="0.217" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/txt_phy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="This / That"
@@ -57,7 +57,7 @@
         app:layout_constraintVertical_bias="0.622" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/txt_mat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="This / That"
@@ -69,7 +69,7 @@
         app:layout_constraintVertical_bias="0.522" />
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/txt_tel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="This / That"
@@ -81,7 +81,7 @@
         app:layout_constraintVertical_bias="0.324" />
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/txt_eng"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="This / That"
@@ -93,7 +93,7 @@
         app:layout_constraintVertical_bias="0.418" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/txt_chem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="This / That"
