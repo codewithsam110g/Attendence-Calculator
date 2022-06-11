@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.rgukt.attend.utils.Record;
 import com.rgukt.attend.utils.RecordAdapter;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,8 +33,9 @@ public class MainActivity extends AppCompatActivity {
     // Using ArrayList to Record data
     private ArrayList<Record> list;
 
-    private int totalDays = 15;
     private int t;
+
+    private static final DecimalFormat df = new DecimalFormat("0.00");
 
     private String arr[] = {
             "Telugu",
@@ -127,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
             String percentRatio_s = r.getPresentRatio();
             float percentage = (float) Integer.parseInt(percentRatio_s) / t;
             float val = percentage * 100;
-            r.setPresentPercent(String.valueOf(val).trim());
+            r.setPresentPercent((df.format(val)).trim());
             temp.add(r);
         }
         sorty(temp);

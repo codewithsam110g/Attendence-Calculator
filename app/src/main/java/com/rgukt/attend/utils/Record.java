@@ -1,5 +1,7 @@
 package com.rgukt.attend.utils;
 
+import com.google.firebase.database.Exclude;
+
 public class Record {
 
     private String SubjectName;
@@ -35,6 +37,7 @@ public class Record {
         PresentRatio = presentRatio;
     }
 
+    @Exclude
     public String getPresentPercent() {
         return PresentPercent;
     }
