@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Attendence Calculator</string>
+    <string name="desc">
+        This is a App made to Keep track \nof Your Class Periods \nand\n mainly Your Periodic Attendence
+    </string>>
 </resources>
