@@ -1,16 +1,20 @@
 package com.rgukt.attend;
 
+import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.util.JsonReader;
-import android.widget.Toast;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.crypto.tink.Aead;
+import com.google.crypto.tink.KeyTemplates;
+import com.google.crypto.tink.KeysetHandle;
+import com.google.crypto.tink.aead.AeadConfig;
+import com.google.crypto.tink.aead.AeadKeyTemplates;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,13 +26,16 @@ import com.google.gson.reflect.TypeToken;
 import com.rgukt.attend.utils.Record;
 import com.rgukt.attend.utils.RecordAdapter;
 
-import org.json.JSONObject;
-
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.crypto.SecretKey;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
-    private Map<String, Integer> totalPeriods = new HashMap<String, Integer>();
+    private Map<String, Integer> totalPeriods = new HashMap<>();
+    private KeysetHandle keysetHandle;
+    private Aead aead;
 
     private String SubList[] = {
             "Telugu",
@@ -55,10 +64,20 @@ public class MainActivity extends AppCompatActivity {
             "InformationTechnology"
     };
 
+    public MainActivity() throws GeneralSecurityException {
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        try {
+            AeadConfig.register();
+            keysetHandle = KeysetHandle.generateNew(KeyTemplates.get("AES128_GCM"));
+            aead = keysetHandle.getPrimitive(Aead.class);
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
         setRecord();
         getRecord();
     }
@@ -78,7 +97,16 @@ public class MainActivity extends AppCompatActivity {
                 .enableComplexMapKeySerialization()
                 .create();
         String str = obj.toJson(totalPeriods);
-        databaseReference.child("TotalDays").setValue(new Record("TotalDays",str,"0"));
+
+        try {
+            byte[] aad = {};
+            databaseReference.child("TotalDays").setValue(new Record("TotalDays", Base64.getEncoder().encodeToString(aead.encrypt(str.getBytes(),aad)), "0"));
+
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void getRecord() {
@@ -113,9 +141,17 @@ public class MainActivity extends AppCompatActivity {
                     //attendance as ref for each child
 
                     Record dat = ds.getValue(Record.class);
-                    if(dat.getSubjectName().equals("TotalDays")){
-                        String str  = dat.getPresentRatio().trim();
-                        totalPeriods = Deserialize(str);
+                    if (dat.getSubjectName().equals("TotalDays")) {
+                        String str = dat.getPresentRatio().trim();
+                        try {
+                            byte[] aad = {};
+                            String res = new String(aead.decrypt(Base64.getDecoder().decode(str), aad));
+                            totalPeriods = Deserialize(res);
+                        } catch (GeneralSecurityException e) {
+                            e.printStackTrace();
+                        }
+
+                        //totalPeriods = Deserialize(str);
                         continue;
                     }
                     list.add(dat);
@@ -134,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void update(){
+    private void update() {
 
         ArrayList<Record> temp = list;
         Object[] records = temp.toArray();
@@ -142,8 +178,13 @@ public class MainActivity extends AppCompatActivity {
         for (Object rec : records) {
             Record r = (Record) rec;
             String percentRatio_s = r.getPresentRatio();
-            float t = totalPeriods.get(r.getSubjectName());
+            String sub = r.getSubjectName();
+
+
+            float t = totalPeriods.get(sub);
             float percentage = (float) Integer.parseInt(percentRatio_s) / t;
+
+
             float val = percentage * 100;
             r.setPresentPercent((df.format(val)).trim());
             temp.add(r);
@@ -153,66 +194,59 @@ public class MainActivity extends AppCompatActivity {
         myAdapter.notifyDataSetChanged();
     }
 
-    private void sorty(ArrayList<Record> list){
+    private void sorty(ArrayList<Record> list) {
         ArrayList<Record> temp = list;
         Object[] records = temp.toArray();
         for (Object rec : records) {
             Record r = (Record) rec;
-            switch (r.getSubjectName()){
-                case "Telugu":
-                {
+            switch (r.getSubjectName()) {
+                case "Telugu": {
                     list.set(0, r);
                     break;
                 }
-                case "English":
-                {
+                case "English": {
                     list.set(1, r);
                     break;
                 }
-                case "Maths":
-                {
+                case "Maths": {
                     list.set(2, r);
                     break;
                 }
-                case "Physics":
-                {
+                case "Physics": {
                     list.set(3, r);
                     break;
                 }
-                case "Chemistry":
-                {
+                case "Chemistry": {
                     list.set(4, r);
                     break;
                 }
-                case "Biology":
-                {
+                case "Biology": {
                     list.set(5, r);
                     break;
                 }
-                case "InformationTechnology":
-                {
+                case "InformationTechnology": {
                     list.set(6, r);
                     break;
                 }
-                default:
-                {
+                default: {
                     Toast.makeText(this, "Error Tried to use Random Record for List", Toast.LENGTH_SHORT).show();
                 }
             }
         }
     }
 
-    private HashMap<String, Integer> Deserialize(String str){
+    private HashMap<String, Integer> Deserialize(String str) {
         GsonBuilder builder = new GsonBuilder();
         Gson obj = builder
                 .enableComplexMapKeySerialization()
                 .create();
-        Type type = new TypeToken<HashMap<String, Integer>>(){}.getType();
+        Type type = new TypeToken<HashMap<String, Integer>>() {
+        }.getType();
         HashMap<String, Integer> dat = obj.fromJson(str, type);
         return dat;
     }
 
-    private void FillPeriods(){
+    private void FillPeriods() {
         for (String s : SubList) {
             totalPeriods.put(s, 15);
         }
