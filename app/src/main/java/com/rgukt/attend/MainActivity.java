@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.JsonReader;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -16,11 +16,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.rgukt.attend.utils.Record;
 import com.rgukt.attend.utils.RecordAdapter;
 
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,11 +41,11 @@ public class MainActivity extends AppCompatActivity {
     // Using ArrayList to Record data
     private ArrayList<Record> list;
 
-    private int t;
-
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
-    private String arr[] = {
+    private Map<String, Integer> totalPeriods = new HashMap<String, Integer>();
+
+    private String SubList[] = {
             "Telugu",
             "English",
             "Maths",
@@ -58,13 +66,19 @@ public class MainActivity extends AppCompatActivity {
     private void setRecord() {
         GoogleSignInAccount acc = GoogleSignIn.getLastSignedInAccount(this);
         if (acc == null) return;
+        FillPeriods();
         databaseReference = FirebaseDatabase.getInstance().getReference(acc.getId()).child("Attendance");
-        for (String s : arr) {
+        for (String s : SubList) {
 
             databaseReference.child(s).setValue(new Record(s, "13", "86.6"));
 
         }
-        databaseReference.child("TotalDays").setValue(new Record("TotalDays","15","0"));
+        GsonBuilder builder = new GsonBuilder();
+        Gson obj = builder
+                .enableComplexMapKeySerialization()
+                .create();
+        String str = obj.toJson(totalPeriods);
+        databaseReference.child("TotalDays").setValue(new Record("TotalDays",str,"0"));
     }
 
     private void getRecord() {
@@ -100,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Record dat = ds.getValue(Record.class);
                     if(dat.getSubjectName().equals("TotalDays")){
-                        t = Integer.parseInt(dat.getPresentRatio().trim());
+                        String str  = dat.getPresentRatio().trim();
+                        totalPeriods = Deserialize(str);
                         continue;
                     }
                     list.add(dat);
@@ -127,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
         for (Object rec : records) {
             Record r = (Record) rec;
             String percentRatio_s = r.getPresentRatio();
+            float t = totalPeriods.get(r.getSubjectName());
             float percentage = (float) Integer.parseInt(percentRatio_s) / t;
             float val = percentage * 100;
             r.setPresentPercent((df.format(val)).trim());
@@ -185,4 +201,21 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    private HashMap<String, Integer> Deserialize(String str){
+        GsonBuilder builder = new GsonBuilder();
+        Gson obj = builder
+                .enableComplexMapKeySerialization()
+                .create();
+        Type type = new TypeToken<HashMap<String, Integer>>(){}.getType();
+        HashMap<String, Integer> dat = obj.fromJson(str, type);
+        return dat;
+    }
+
+    private void FillPeriods(){
+        for (String s : SubList) {
+            totalPeriods.put(s, 15);
+        }
+    }
+
 }
