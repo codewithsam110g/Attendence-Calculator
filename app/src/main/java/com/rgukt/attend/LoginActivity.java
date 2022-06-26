@@ -14,7 +14,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.tasks.Task;
 
 public class LoginActivity extends AppCompatActivity {
@@ -35,12 +34,13 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if(account != null){
+        if (account != null) {
             Toast.makeText(this, "Hello " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
         }
 
-        SignInButton signInButton =findViewById(R.id.sign_in_button);
+        SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_WIDE | SignInButton.COLOR_DARK);
 
         signInButton.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void signIn(){
+    private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 1);
     }
@@ -73,9 +73,10 @@ public class LoginActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            if(account != null){
-                    Toast.makeText(this, "Hello " + account.getDisplayName(), Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            if (account != null) {
+                Toast.makeText(this, "Hello " + account.getDisplayName(), Toast.LENGTH_LONG).show();
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
             }
 
         } catch (ApiException e) {

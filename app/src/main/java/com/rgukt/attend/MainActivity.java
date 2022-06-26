@@ -1,165 +1,111 @@
 package com.rgukt.attend;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.crypto.tink.Aead;
-import com.google.crypto.tink.KeyTemplates;
-import com.google.crypto.tink.KeysetHandle;
-import com.google.crypto.tink.aead.AeadConfig;
-import com.google.crypto.tink.aead.AeadKeyTemplates;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import com.rgukt.attend.utils.Record;
-import com.rgukt.attend.utils.RecordAdapter;
+import com.rgukt.attend.objects.SubjectData;
+import com.rgukt.attend.objects.SubjectViewData;
+import com.rgukt.attend.utils.SubjectViewAdapter;
+import com.rgukt.attend.utils.Utils;
 
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.crypto.SecretKey;
+public class MainActivity extends AppCompatActivity implements SubjectViewAdapter.SubjectViewClickInterface {
 
-public class MainActivity extends AppCompatActivity {
+    private RecyclerView rv;
+    private ProgressBar pb;
+    private FloatingActionButton fab;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mDatabaseRef;
+    private ArrayList<SubjectViewData> viewData;
+    private RelativeLayout bottomSheet;
+    private SubjectViewAdapter adapter;
+    private GoogleSignInAccount account;
 
-    private DatabaseReference databaseReference;
 
-    private RecyclerView recyclerView;
-
-    private RecordAdapter myAdapter;
-
-    // Using ArrayList to Record data
-    private ArrayList<Record> list;
-
-    private static final DecimalFormat df = new DecimalFormat("0.00");
-
-    private Map<String, Integer> totalPeriods = new HashMap<>();
-    private KeysetHandle keysetHandle;
-    private Aead aead;
-
-    private String SubList[] = {
-            "Telugu",
-            "English",
-            "Maths",
-            "Physics",
-            "Chemistry",
-            "Biology",
-            "InformationTechnology"
-    };
-
-    public MainActivity() throws GeneralSecurityException {
-    }
+    private int count = 0;
+    private int countLimit = 2;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        try {
-            AeadConfig.register();
-            keysetHandle = KeysetHandle.generateNew(KeyTemplates.get("AES128_GCM"));
-            aead = keysetHandle.getPrimitive(Aead.class);
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        }
-        setRecord();
-        getRecord();
-    }
 
-    private void setRecord() {
-        GoogleSignInAccount acc = GoogleSignIn.getLastSignedInAccount(this);
-        if (acc == null) return;
-        FillPeriods();
-        databaseReference = FirebaseDatabase.getInstance().getReference(acc.getId()).child("Attendance");
-        for (String s : SubList) {
-
-            databaseReference.child(s).setValue(new Record(s, "13", "86.6"));
-
-        }
-        GsonBuilder builder = new GsonBuilder();
-        Gson obj = builder
-                .enableComplexMapKeySerialization()
-                .create();
-        String str = obj.toJson(totalPeriods);
-
-        try {
-            byte[] aad = {};
-            databaseReference.child("TotalDays").setValue(new Record("TotalDays", Base64.getEncoder().encodeToString(aead.encrypt(str.getBytes(),aad)), "0"));
-
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
+        account = GoogleSignIn.getLastSignedInAccount(this);
+        if (account == null) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
         }
 
+        rv = findViewById(R.id.rv_courses);
+        pb = findViewById(R.id.pb_loading);
+        fab = findViewById(R.id.btn_fab);
+        mDatabase = FirebaseDatabase.getInstance();
+        mDatabaseRef = mDatabase.getReference(account.getId()).child("Subjects");
+        viewData = new ArrayList<>();
+        bottomSheet = findViewById(R.id.rlb_sheet);
+        adapter = new SubjectViewAdapter(viewData, this, this);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setAdapter(adapter);
+        fab.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AddSubjectActivity.class)));
+
+        getAllSubjects();
 
     }
 
-    private void getRecord() {
-
-        GoogleSignInAccount acc = GoogleSignIn.getLastSignedInAccount(this);
-        if (acc == null) return;
-
-        // Getting reference of recyclerView
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-
-        // Setting the layout as linear
-        // layout for vertical orientation
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        list = new ArrayList<>();
-        myAdapter = new RecordAdapter(this, list);
-
-        // Setting Adapter to RecyclerView
-        recyclerView.setAdapter(myAdapter);
-
-        // get firebase instance for the desired key location
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child(acc.getId()).child("Attendance").addValueEventListener(new ValueEventListener() {
+    private void getAllSubjects() {
+        viewData.clear();
+        mDatabaseRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                pb.setVisibility(View.GONE);
+                SubjectData dat = snapshot.getValue(SubjectData.class);
+                viewData.add(Utils.toSubjectViewData(dat));
+                adapter.notifyDataSetChanged();
+            }
 
-                list.clear();
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                pb.setVisibility(View.GONE);
+                adapter.notifyDataSetChanged();
+            }
 
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    //userid -> Attendance -> list of subjects
-                    //attendance as ref for each child
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                pb.setVisibility(View.GONE);
+                adapter.notifyDataSetChanged();
+            }
 
-                    Record dat = ds.getValue(Record.class);
-                    if (dat.getSubjectName().equals("TotalDays")) {
-                        String str = dat.getPresentRatio().trim();
-                        try {
-                            byte[] aad = {};
-                            String res = new String(aead.decrypt(Base64.getDecoder().decode(str), aad));
-                            totalPeriods = Deserialize(res);
-                        } catch (GeneralSecurityException e) {
-                            e.printStackTrace();
-                        }
-
-                        //totalPeriods = Deserialize(str);
-                        continue;
-                    }
-                    list.add(dat);
-
-                }
-                update();
-                //notifying adapter class about the change
-                //myAdapter.notifyDataSetChanged();
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                pb.setVisibility(View.GONE);
+                adapter.notifyDataSetChanged();
 
             }
 
@@ -168,87 +114,92 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
-    private void update() {
 
-        ArrayList<Record> temp = list;
-        Object[] records = temp.toArray();
-        temp.clear();
-        for (Object rec : records) {
-            Record r = (Record) rec;
-            String percentRatio_s = r.getPresentRatio();
-            String sub = r.getSubjectName();
+    @Override
+    public void onSubjectClick(int position) {
+        displayBottomSheet(viewData.get(position));
+    }
 
+    private void displayBottomSheet(SubjectViewData dat) {
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        View layout = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_dialog, bottomSheet);
+        bottomSheetDialog.setContentView(layout);
+        bottomSheetDialog.setCancelable(false);
+        bottomSheetDialog.setCanceledOnTouchOutside(true);
+        bottomSheetDialog.show();
 
-            float t = totalPeriods.get(sub);
-            float percentage = (float) Integer.parseInt(percentRatio_s) / t;
+        TextView subName = layout.findViewById(R.id.txt_subject_name);
+        TextView present = layout.findViewById(R.id.txt_present_classes);
+        TextView absent = layout.findViewById(R.id.txt_absent_classes);
+        TextView total = layout.findViewById(R.id.txt_total_classes);
+        TextView status = layout.findViewById(R.id.txt_current_status);
+        Button edit = layout.findViewById(R.id.btn_edit_subject);
+        Button view = layout.findViewById(R.id.btn_view_status);
 
+        SubjectData sub = Utils.toSubjectData(dat);
 
-            float val = percentage * 100;
-            r.setPresentPercent((df.format(val)).trim());
-            temp.add(r);
+        subName.setText(dat.getSubjectName());
+        present.setText("You are Present for: " + sub.getPresentClasses() + " classes");
+        absent.setText("You are Absent for: " + (sub.getTotalClasses() - sub.getPresentClasses()) + " classes");
+        total.setText("Total Classes Conducted: " + sub.getPresentClasses());
+        status.setText("Your Current Percentage is: " + dat.getPresentPercent() + "%");
+
+        edit.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, EditSubjectActivity.class);
+            i.putExtra("subject", sub);
+            startActivity(i);
+            finish();
+        });
+
+        view.setOnClickListener(v -> {
+            //TODO: create a dialog box that shows how many days he can be absent or present to meet the set percentage
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        count++;
+        if (count < countLimit) {
+            Toast.makeText(this, "Press back one more time! to Exit", Toast.LENGTH_SHORT).show();
+        } else if (count == countLimit) {
+            super.onBackPressed();
         }
-        sorty(temp);
-        list = temp;
-        myAdapter.notifyDataSetChanged();
     }
 
-    private void sorty(ArrayList<Record> list) {
-        ArrayList<Record> temp = list;
-        Object[] records = temp.toArray();
-        for (Object rec : records) {
-            Record r = (Record) rec;
-            switch (r.getSubjectName()) {
-                case "Telugu": {
-                    list.set(0, r);
-                    break;
-                }
-                case "English": {
-                    list.set(1, r);
-                    break;
-                }
-                case "Maths": {
-                    list.set(2, r);
-                    break;
-                }
-                case "Physics": {
-                    list.set(3, r);
-                    break;
-                }
-                case "Chemistry": {
-                    list.set(4, r);
-                    break;
-                }
-                case "Biology": {
-                    list.set(5, r);
-                    break;
-                }
-                case "InformationTechnology": {
-                    list.set(6, r);
-                    break;
-                }
-                default: {
-                    Toast.makeText(this, "Error Tried to use Random Record for List", Toast.LENGTH_SHORT).show();
-                }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.logout: {
+                Toast.makeText(this, "User Logged Out Successfully!", Toast.LENGTH_SHORT).show();
+                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestEmail()
+                        .build();
+                GoogleSignInClient client = GoogleSignIn.getClient(MainActivity.this, gso);
+                client.signOut();
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(i);
+                this.finish();
+                return true;
             }
-        }
-    }
-
-    private HashMap<String, Integer> Deserialize(String str) {
-        GsonBuilder builder = new GsonBuilder();
-        Gson obj = builder
-                .enableComplexMapKeySerialization()
-                .create();
-        Type type = new TypeToken<HashMap<String, Integer>>() {
-        }.getType();
-        HashMap<String, Integer> dat = obj.fromJson(str, type);
-        return dat;
-    }
-
-    private void FillPeriods() {
-        for (String s : SubList) {
-            totalPeriods.put(s, 15);
+            case R.id.settings: {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                finish();
+            }
+            default: {
+                return super.onOptionsItemSelected(item);
+            }
         }
     }
 

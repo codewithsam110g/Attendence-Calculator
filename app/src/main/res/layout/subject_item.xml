@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/subjectName"
+            android:id="@+id/txt_subject_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -29,7 +29,7 @@
             android:textSize="20dp" />
 
         <TextView
-            android:id="@+id/presentRat"
+            android:id="@+id/txt_present_ratio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -40,7 +40,7 @@
             android:textSize="20dp" />
 
         <TextView
-            android:id="@+id/percentage"
+            android:id="@+id/txt_percentage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

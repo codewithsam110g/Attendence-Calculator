@@ -1,63 +1,39 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ac_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue_shade_1"
     tools:context=".MainActivity">
 
-    <!-- Linear layout of horizontal orientation -->
-    <LinearLayout
-        android:id="@+id/ll1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:background="#D6EEEE">
-
-        <!-- icon for user name column heading -->
-        <ImageView
-            android:id="@+id/subjectName"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_weight="0.5"
-            android:gravity="center"
-            android:src="@drawable/user_record_icon"
-            android:padding="5dp"/>
-
-
-        <!-- icon for number of attempted column heading -->
-        <ImageView
-            android:id="@+id/presentRat"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:src="@drawable/attempted_icon"
-            android:padding="5dp"/>
-
-        <!-- icon for number of correct column heading -->
-        <ImageView
-            android:id="@+id/percentage"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:src="@drawable/correct_icon"
-            android:padding="5dp"/>
-
-
-    </LinearLayout>
-
-    <!-- Recycler view for populating data in a table format -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/rv_courses"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/ll1"
-        android:background="#D6EEEE" />
+        android:layout_height="match_parent" />
+
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        android:indeterminateDrawable="@drawable/progress_back" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/blue_shade_2"
+        android:src="@drawable/ic_add"
+        android:tint="@color/white" />
+
 
 </RelativeLayout>
