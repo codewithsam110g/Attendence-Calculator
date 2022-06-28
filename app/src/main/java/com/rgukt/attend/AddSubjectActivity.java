@@ -22,7 +22,7 @@ import com.rgukt.attend.objects.SubjectData;
 
 public class AddSubjectActivity extends AppCompatActivity {
 
-    private TextInputEditText edt_subjectName, edt_presentDays, edt_totalDays;
+    private TextInputEditText edt_subjectName, edt_presentDays, edt_totalDays, edt_recPercentage;
     private Button btn_addSubject;
     private ProgressBar pb;
     private FirebaseDatabase mDatabase;
@@ -43,6 +43,7 @@ public class AddSubjectActivity extends AppCompatActivity {
         edt_subjectName = findViewById(R.id.edt_sub_name);
         edt_presentDays = findViewById(R.id.edt_present_days);
         edt_totalDays = findViewById(R.id.edt_total_days);
+        edt_recPercentage = findViewById(R.id.edt_rec_percent);
         btn_addSubject = findViewById(R.id.btn_add_subject);
         pb = findViewById(R.id.pb_loading);
         mDatabase = FirebaseDatabase.getInstance();
@@ -53,10 +54,21 @@ public class AddSubjectActivity extends AppCompatActivity {
             String subName = edt_subjectName.getText().toString();
             String presentDays = edt_presentDays.getText().toString();
             String totalDays = edt_totalDays.getText().toString();
+            String recPercent = (!edt_recPercentage.getText().toString().equals("")
+                    || !edt_recPercentage.getText().toString().equals("0"))
+                    ? edt_recPercentage.getText().toString() : "75";
 
             subjectId = subName;
 
-            SubjectData course = new SubjectData(subName, Integer.parseInt(presentDays), Integer.parseInt(totalDays), subjectId);
+            if(subName.trim().length() == 0 || presentDays.trim().length() == 0
+                    || totalDays.trim().length() == 0) {
+                pb.setVisibility(View.GONE);
+                Toast.makeText(this, "Please Enter all of the Fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            SubjectData course = new SubjectData(subName, Integer.parseInt(presentDays),
+                    Integer.parseInt(totalDays), Integer.parseInt(recPercent), subjectId);
 
             mDatabaseRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -71,7 +83,8 @@ public class AddSubjectActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     pb.setVisibility(View.GONE);
-                    Toast.makeText(AddSubjectActivity.this, "Cannot add Course!\n The Error is " + error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddSubjectActivity.this,
+                            "Cannot add Course!\n The Error is " + error, Toast.LENGTH_SHORT).show();
                 }
             });
 

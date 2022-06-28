@@ -3,7 +3,12 @@ package com.rgukt.attend.utils;
 import com.rgukt.attend.objects.SubjectData;
 import com.rgukt.attend.objects.SubjectViewData;
 
+import java.text.DecimalFormat;
+
 public class Utils {
+
+    private static DecimalFormat df = new DecimalFormat("0.0");
+
     public static SubjectData toSubjectData(SubjectViewData subView) {
         SubjectData dat = new SubjectData();
 
@@ -17,6 +22,7 @@ public class Utils {
         dat.setPresentClasses(present);
         dat.setTotalClasses(total);
         dat.setSubjectId(subView.getSubjectId());
+        dat.setRecPercentage(Integer.parseInt(subView.getRecPercent()));
 
         return dat;
     }
@@ -28,9 +34,11 @@ public class Utils {
 
         String presentRatio = (sub.getPresentClasses() + "/") + ((sub.getTotalClasses() != 0) ? sub.getTotalClasses() : 1);
         float percent = ((float) sub.getPresentClasses() / (float) ((sub.getTotalClasses() != 0) ? sub.getTotalClasses() : 1)) * 100;
+
         viewDat.setPresentRatio(presentRatio);
-        viewDat.setPresentPercent(String.valueOf(percent));
+        viewDat.setPresentPercent(df.format(percent));
         viewDat.setSubjectId(sub.getSubjectId());
+        viewDat.setRecPercent(String.valueOf(sub.getRecPercentage()));
         return viewDat;
     }
 

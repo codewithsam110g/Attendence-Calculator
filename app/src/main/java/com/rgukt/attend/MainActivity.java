@@ -1,5 +1,6 @@
 package com.rgukt.attend;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements SubjectViewAdapte
     private RelativeLayout bottomSheet;
     private SubjectViewAdapter adapter;
     private GoogleSignInAccount account;
+    private TextView txtNoData;
 
 
     private int count = 0;
@@ -71,11 +73,17 @@ public class MainActivity extends AppCompatActivity implements SubjectViewAdapte
         viewData = new ArrayList<>();
         bottomSheet = findViewById(R.id.rlb_sheet);
         adapter = new SubjectViewAdapter(viewData, this, this);
+        txtNoData = findViewById(R.id.txt_no_data);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
         fab.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AddSubjectActivity.class)));
 
+        txtNoData.setVisibility(View.GONE);
+
         getAllSubjects();
+        if (viewData.size() != 0) {
+            txtNoData.setVisibility(View.GONE);
+        }
 
     }
 
@@ -88,24 +96,34 @@ public class MainActivity extends AppCompatActivity implements SubjectViewAdapte
                 SubjectData dat = snapshot.getValue(SubjectData.class);
                 viewData.add(Utils.toSubjectViewData(dat));
                 adapter.notifyDataSetChanged();
+                txtNoData.setVisibility(View.GONE);
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 pb.setVisibility(View.GONE);
                 adapter.notifyDataSetChanged();
+                txtNoData.setVisibility(View.GONE);
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 pb.setVisibility(View.GONE);
                 adapter.notifyDataSetChanged();
+
+                if (viewData.size() == 0) {
+                    txtNoData.setVisibility(View.VISIBLE);
+                } else {
+                    txtNoData.setVisibility(View.GONE);
+                }
+
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 pb.setVisibility(View.GONE);
                 adapter.notifyDataSetChanged();
+                txtNoData.setVisibility(View.GONE);
 
             }
 
@@ -114,6 +132,14 @@ public class MainActivity extends AppCompatActivity implements SubjectViewAdapte
 
             }
         });
+
+        if (viewData.size() == 0) {
+            pb.setVisibility(View.GONE);
+            txtNoData.setVisibility(View.VISIBLE);
+        } else {
+            pb.setVisibility(View.GONE);
+            txtNoData.setVisibility(View.GONE);
+        }
 
     }
 
@@ -155,7 +181,46 @@ public class MainActivity extends AppCompatActivity implements SubjectViewAdapte
         });
 
         view.setOnClickListener(v -> {
-            //TODO: create a dialog box that shows how many days he can be absent or present to meet the set percentage
+            bottomSheetDialog.dismiss();
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            String res;
+            float val = (Float.parseFloat(dat.getPresentPercent()) - sub.getRecPercentage());
+            int x = sub.getPresentClasses();
+            int y = sub.getTotalClasses();
+            float sp = sub.getRecPercentage();
+            float days;
+            if (val > 0) {
+                days = (100 * x / sp) - y;
+                days = (float) Math.floor(days);
+                if (days > 1) {
+                    res = "You can take leave for: " + days + " more classes";
+                } else {
+                    res = "You are close to Recommended percentage! So don't be Absent until you are present for a few more days!";
+                }
+
+            } else if (val < 0) {
+                days = ((sp * y) - (100 * x)) / (100 - sp);
+                days = (float) Math.ceil(days);
+                if (days > 1) {
+                    res = "you have to attend upcoming: " + days + " classes to keep Your Percentage";
+                } else {
+                    res = "You are close to Recommended percentage! So don't be Absent until you are present for a few more days!";
+                }
+            } else {
+                res = "You are right on Recommended percentage! So don't be Absent until you are present for a few more days!";
+            }
+
+            dialog.setMessage(res);
+            dialog.setTitle("Present or Absent?");
+
+            dialog.setNeutralButton("Ok", (dialog1, which) -> {
+                Toast.makeText(this, "You should do that and Keep up your Attendence", Toast.LENGTH_SHORT).show();
+            });
+            dialog.setCancelable(false);
+
+            AlertDialog alertDialog = dialog.create();
+            alertDialog.show();
+
         });
 
     }
@@ -169,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements SubjectViewAdapte
             super.onBackPressed();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

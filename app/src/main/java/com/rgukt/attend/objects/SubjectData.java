@@ -19,19 +19,22 @@ public class SubjectData implements Parcelable {
     private String subjectName;
     private int presentClasses;
     private int totalClasses;
+    private int recPercentage;
     private String subjectId;
 
     public SubjectData() {
         subjectName = "NAN";
         presentClasses = 0;
         totalClasses = 1;
+        recPercentage = 0;
         subjectId = "NAN";
     }
 
-    public SubjectData(String subjectName, int presentClasses, int totalClasses, String subjectID) {
+    public SubjectData(String subjectName, int presentClasses, int totalClasses, int recPercentage, String subjectID) {
         this.subjectName = subjectName;
         this.presentClasses = presentClasses;
         this.totalClasses = totalClasses;
+        this.recPercentage = recPercentage;
         this.subjectId = subjectID;
     }
 
@@ -39,6 +42,7 @@ public class SubjectData implements Parcelable {
         subjectName = in.readString();
         presentClasses = in.readInt();
         totalClasses = in.readInt();
+        recPercentage = in.readInt();
         subjectId = in.readString();
     }
 
@@ -66,6 +70,14 @@ public class SubjectData implements Parcelable {
         this.totalClasses = totalClasses;
     }
 
+    public int getRecPercentage() {
+        return recPercentage;
+    }
+
+    public void setRecPercentage(int recPercentage) {
+        this.recPercentage = recPercentage;
+    }
+
     public String getSubjectId() {
         return subjectId;
     }
@@ -84,6 +96,7 @@ public class SubjectData implements Parcelable {
         dest.writeString(subjectName);
         dest.writeInt(presentClasses);
         dest.writeInt(totalClasses);
+        dest.writeInt(recPercentage);
         dest.writeString(subjectId);
     }
 }

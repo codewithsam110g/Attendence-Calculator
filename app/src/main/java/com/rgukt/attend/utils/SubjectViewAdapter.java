@@ -42,6 +42,7 @@ public class SubjectViewAdapter extends RecyclerView.Adapter<SubjectViewAdapter.
         holder.name.setText(dat.getSubjectName());
         holder.ratio.setText(dat.getPresentRatio());
         holder.percent.setText(dat.getPresentPercent() + "%");
+        holder.recPercent.setText(dat.getRecPercent() + "%");
         setAnimation(holder.itemView, position);
         holder.itemView.setOnClickListener(v -> {
             subjectViewClickInterface.onSubjectClick(position);
@@ -67,13 +68,14 @@ public class SubjectViewAdapter extends RecyclerView.Adapter<SubjectViewAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, ratio, percent;
+        TextView name, ratio, percent, recPercent;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.txt_subject_name);
             ratio = itemView.findViewById(R.id.txt_present_ratio);
             percent = itemView.findViewById(R.id.txt_percentage);
+            recPercent = itemView.findViewById(R.id.txt_rec_percent);
         }
     }
 }

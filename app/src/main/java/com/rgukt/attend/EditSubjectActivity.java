@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class EditSubjectActivity extends AppCompatActivity {
 
-    private TextInputEditText edt_subjectName, edt_PresentClasses, edt_TotalClasses;
+    private TextInputEditText edt_subjectName, edt_PresentClasses, edt_TotalClasses, edt_rec_percent;
     private Button btn_updateSubject, btn_removeSubject;
     private ProgressBar pb;
     private FirebaseDatabase mDatabase;
@@ -42,6 +42,7 @@ public class EditSubjectActivity extends AppCompatActivity {
         edt_subjectName = findViewById(R.id.edt_sub_name);
         edt_PresentClasses = findViewById(R.id.edt_present_days);
         edt_TotalClasses = findViewById(R.id.edt_total_days);
+        edt_rec_percent = findViewById(R.id.edt_rec_percent);
         btn_updateSubject = findViewById(R.id.btn_update_subject);
         btn_removeSubject = findViewById(R.id.btn_remove_subject);
         pb = findViewById(R.id.pb_loading);
@@ -53,6 +54,7 @@ public class EditSubjectActivity extends AppCompatActivity {
             edt_subjectName.setText(subject.getSubjectName());
             edt_PresentClasses.setText(String.valueOf(subject.getPresentClasses()));
             edt_TotalClasses.setText(String.valueOf(subject.getTotalClasses()));
+            edt_rec_percent.setText(String.valueOf(subject.getRecPercentage()));
             subjectId = subject.getSubjectId();
         }
 
@@ -69,13 +71,17 @@ public class EditSubjectActivity extends AppCompatActivity {
             String subjectName = edt_subjectName.getText().toString();
             String pD = edt_PresentClasses.getText().toString();
             String tD = edt_TotalClasses.getText().toString();
+            String recPercent = edt_rec_percent.getText().toString();
 
-            if (!TextUtils.isEmpty(subjectName) && !TextUtils.isEmpty(pD) && !TextUtils.isEmpty(tD) && (TextUtils.isDigitsOnly(pD) && TextUtils.isDigitsOnly(tD))) {
+            if (!TextUtils.isEmpty(subjectName) && !TextUtils.isEmpty(pD) && !TextUtils.isEmpty(recPercent)
+                    && !TextUtils.isEmpty(tD) && (TextUtils.isDigitsOnly(pD) && TextUtils.isDigitsOnly(tD)
+                    && TextUtils.isDigitsOnly(recPercent))) {
 
                 Map<String, Object> map = new HashMap<>();
                 map.put("subjectName", subjectName);
                 map.put("presentClasses", Integer.parseInt(pD));
                 map.put("totalClasses", Integer.parseInt(tD));
+                map.put("recPercentage", Integer.parseInt(recPercent));
                 map.put("subjectId", subjectId);
 
                 mDatabaseRef.addValueEventListener(new ValueEventListener() {
@@ -83,7 +89,8 @@ public class EditSubjectActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         pb.setVisibility(View.GONE);
                         mDatabaseRef.updateChildren(map);
-                        Toast.makeText(EditSubjectActivity.this, "Updated Course Successfully!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditSubjectActivity.this,
+                                "Updated Course Successfully!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(EditSubjectActivity.this, MainActivity.class));
                         finish();
                     }
@@ -91,7 +98,8 @@ public class EditSubjectActivity extends AppCompatActivity {
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         pb.setVisibility(View.GONE);
-                        Toast.makeText(EditSubjectActivity.this, "Failed to Update Course! Please Try again Later", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditSubjectActivity.this,
+                                "Failed to Update Course! Please Try again Later", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

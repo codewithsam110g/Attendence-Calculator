@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@color/blue_shade_2"
     android:paddingTop="15dp"
     android:paddingBottom="15dp"
     android:layout_marginBottom="3dp">
@@ -22,11 +22,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="0.5"
+            android:layout_weight="0.6"
             android:gravity="center"
-            android:text="Naman Kumar Jha"
-            android:textColor="@color/black"
-            android:textSize="20dp" />
+            android:text="Subject Name"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/txt_present_ratio"
@@ -35,9 +35,20 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="40"
-            android:textColor="@color/black"
-            android:textSize="20dp" />
+            android:text="P/A"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/txt_rec_percent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="R%"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/txt_percentage"
@@ -46,11 +57,9 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="23"
-            android:textColor="@color/black"
-            android:textSize="20dp" />
-
-
+            android:text="C%"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
 
     </LinearLayout>
 
