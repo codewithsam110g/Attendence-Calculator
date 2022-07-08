@@ -44,4 +44,5 @@ dependencies {
     implementation 'com.google.crypto.tink:tink-android:1.6.1'
     implementation 'org.apache.commons:commons-lang3:3.9'
     apply plugin:"kotlin-android-extensions"
+    implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0'
 }
