@@ -229,10 +229,11 @@ public class MainActivity extends AppCompatActivity implements SubjectViewAdapte
     public void onBackPressed() {
         count++;
         if (count < countLimit) {
-            Toast.makeText(this, "Press back one more time! to Exit", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Press back one more time to Exit", Toast.LENGTH_SHORT).show();
         } else if (count == countLimit) {
             super.onBackPressed();
         }
+        //TODO: add timer to close so that it checks if user wants to close actually to prevent accidental close
     }
 
     @Override
@@ -260,6 +261,12 @@ public class MainActivity extends AppCompatActivity implements SubjectViewAdapte
             case R.id.settings: {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 finish();
+                return true;
+            }
+            case R.id.time_table:{
+                startActivity(new Intent(MainActivity.this, TimeTableActivity.class));
+                finish();
+                return true;
             }
             default: {
                 return super.onOptionsItemSelected(item);

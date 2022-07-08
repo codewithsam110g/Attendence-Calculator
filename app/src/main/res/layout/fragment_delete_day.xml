@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue_shade_1"
+    tools:context=".fragments.DeleteDayFragment">
+
+    <TextView
+        android:id="@+id/txt_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="Select which day you want to delete"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <Spinner
+        android:id="@+id/spn_days_delete"
+        android:layout_width="390dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txt_1"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:padding="8dp"
+        android:spinnerMode="dropdown" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/spn_days_delete"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:id="@+id/lly_delete_day">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_day"
+            android:text="Period 1: "
+            android:textColor="@color/white"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_p1"
+            android:layout_marginTop="8dp"
+            android:text="Period 1: "
+            android:textColor="@color/white"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:id="@+id/txt_p2"
+            android:text="Period 2: "
+            android:textColor="@color/white"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:id="@+id/txt_p3"
+            android:text="Period 3: "
+            android:textColor="@color/white"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:id="@+id/txt_p4"
+            android:text="Period 4: "
+            android:textColor="@color/white"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:id="@+id/txt_p5"
+            android:text="Period 5: "
+            android:textColor="@color/white"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:id="@+id/txt_p6"
+            android:text="Period 6: "
+            android:textColor="@color/white"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:id="@+id/txt_p7"
+            android:text="Period 7: "
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_delete_day"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lly_delete_day"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/custom_button_back"
+        android:padding="8dp"
+        android:text="Delete"
+        android:textAllCaps="false"
+        android:textSize="14sp" />
+
+</RelativeLayout>
