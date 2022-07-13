@@ -19,14 +19,14 @@ public class SubjectData implements Parcelable {
     private String subjectName;
     private int presentClasses;
     private int totalClasses;
-    private int recPercentage;
+    private int recommendedPercentage;
     private String subjectId;
 
     public SubjectData() {
         subjectName = "NAN";
         presentClasses = 0;
         totalClasses = 1;
-        recPercentage = 0;
+        recommendedPercentage = 0;
         subjectId = "NAN";
     }
 
@@ -34,7 +34,7 @@ public class SubjectData implements Parcelable {
         this.subjectName = subjectName;
         this.presentClasses = presentClasses;
         this.totalClasses = totalClasses;
-        this.recPercentage = recPercentage;
+        this.recommendedPercentage = recPercentage;
         this.subjectId = subjectID;
     }
 
@@ -42,7 +42,7 @@ public class SubjectData implements Parcelable {
         subjectName = in.readString();
         presentClasses = in.readInt();
         totalClasses = in.readInt();
-        recPercentage = in.readInt();
+        recommendedPercentage = in.readInt();
         subjectId = in.readString();
     }
 
@@ -70,12 +70,12 @@ public class SubjectData implements Parcelable {
         this.totalClasses = totalClasses;
     }
 
-    public int getRecPercentage() {
-        return recPercentage;
+    public int getRecommendedPercentage() {
+        return recommendedPercentage;
     }
 
-    public void setRecPercentage(int recPercentage) {
-        this.recPercentage = recPercentage;
+    public void setRecommendedPercentage(int recommendedPercentage) {
+        this.recommendedPercentage = recommendedPercentage;
     }
 
     public String getSubjectId() {
@@ -96,7 +96,7 @@ public class SubjectData implements Parcelable {
         dest.writeString(subjectName);
         dest.writeInt(presentClasses);
         dest.writeInt(totalClasses);
-        dest.writeInt(recPercentage);
+        dest.writeInt(recommendedPercentage);
         dest.writeString(subjectId);
     }
 }

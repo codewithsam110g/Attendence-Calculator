@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class DatabaseHandler4v3 extends SQLiteOpenHelper {
 
-    private static final String DB_NAME = "timetable";
+    private static final String DB_NAME = "timetable.db";
 
     private static final int DB_VERSION = 1;
 
@@ -40,25 +40,23 @@ public class DatabaseHandler4v3 extends SQLiteOpenHelper {
         String query = "CREATE TABLE " + TABLE_NAME + " ("
                 + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + DAY + " TEXT,"
-                + PER1 +" TEXT,"
-                + PER2 +" TEXT,"
-                + PER3 +" TEXT,"
-                + PER4 +" TEXT,"
-                + PER5 +" TEXT,"
-                + PER6 +" TEXT,"
-                + PER7 +" TEXT)";
+                + PER1 + " TEXT,"
+                + PER2 + " TEXT,"
+                + PER3 + " TEXT,"
+                + PER4 + " TEXT,"
+                + PER5 + " TEXT,"
+                + PER6 + " TEXT,"
+                + PER7 + " TEXT)";
 
         db.execSQL(query);
     }
 
-    public boolean addDayToTable(Day4v3 d){
+    public boolean addDayToTable(Day4v3 d) {
 
         {
             Day4v3 ds = new Day4v3();
-            if(d == ds) return false;
+            if (d == ds) return false;
         }
-
-        //TODO: Implement search method so that same day cant be add multiple Times
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -79,7 +77,7 @@ public class DatabaseHandler4v3 extends SQLiteOpenHelper {
     }
 
     @SuppressLint("Range")
-    public HashMap<String, Day4v3> readDaysInTable(){
+    public HashMap<String, Day4v3> readDaysInTable() {
         HashMap<String, Day4v3> res = new HashMap<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -105,11 +103,11 @@ public class DatabaseHandler4v3 extends SQLiteOpenHelper {
         return res;
     }
 
-    public boolean updateDayInTable(String day, Day4v3 newDayData){
+    public boolean updateDayInTable(String day, Day4v3 newDayData) {
 
         {
             Day4v3 ds = new Day4v3();
-            if(newDayData == ds) return false;
+            if (newDayData == ds) return false;
         }
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -131,12 +129,12 @@ public class DatabaseHandler4v3 extends SQLiteOpenHelper {
 
     }
 
-    public boolean deleteDayInTable(String day){
+    public boolean deleteDayInTable(String day) {
         SQLiteDatabase db = this.getReadableDatabase();
         int res = db.delete(TABLE_NAME, "Day=?", new String[]{day});
         db.close();
 
-        if(res == SQLiteDatabase.CONFLICT_NONE){
+        if (res == SQLiteDatabase.CONFLICT_NONE) {
             return true;
         }
 
@@ -148,4 +146,5 @@ public class DatabaseHandler4v3 extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
+
 }

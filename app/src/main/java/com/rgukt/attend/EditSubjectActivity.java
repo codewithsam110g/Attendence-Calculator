@@ -24,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rgukt.attend.objects.SubjectData;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,7 +64,7 @@ public class EditSubjectActivity extends AppCompatActivity {
             edt_subjectName.setText(subject.getSubjectName());
             edt_PresentClasses.setText(String.valueOf(subject.getPresentClasses()));
             edt_TotalClasses.setText(String.valueOf(subject.getTotalClasses()));
-            edt_rec_percent.setText(String.valueOf(subject.getRecPercentage()));
+            edt_rec_percent.setText(String.valueOf(subject.getRecommendedPercentage()));
             subjectId = subject.getSubjectId();
         }
 
@@ -72,7 +74,7 @@ public class EditSubjectActivity extends AppCompatActivity {
             finish();
         }
 
-        mDatabaseRef = mDatabase.getReference(account.getId()).child("Subjects").child(subjectId);
+        mDatabaseRef = mDatabase.getReference(account.getId()).child("Subjects").child(StringUtils.capitalize(subjectId));
 
         btn_updateSubject.setOnClickListener(v -> {
 
@@ -80,17 +82,18 @@ public class EditSubjectActivity extends AppCompatActivity {
             String pD = edt_PresentClasses.getText().toString();
             String tD = edt_TotalClasses.getText().toString();
             String recPercent = edt_rec_percent.getText().toString();
+            recPercent = (recPercent.equals("") || recPercent.equals("0")) ? "75" : recPercent;
 
             if (!TextUtils.isEmpty(subjectName) && !TextUtils.isEmpty(pD) && !TextUtils.isEmpty(recPercent)
                     && !TextUtils.isEmpty(tD) && (TextUtils.isDigitsOnly(pD) && TextUtils.isDigitsOnly(tD)
                     && TextUtils.isDigitsOnly(recPercent))) {
 
                 Map<String, Object> map = new HashMap<>();
-                map.put("subjectName", subjectName);
+                map.put("subjectName", StringUtils.capitalize(subjectName));
                 map.put("presentClasses", Integer.parseInt(pD));
                 map.put("totalClasses", Integer.parseInt(tD));
                 map.put("recPercentage", Integer.parseInt(recPercent));
-                map.put("subjectId", subjectId);
+                map.put("subjectId", StringUtils.capitalize(subjectId));
 
                 mDatabaseRef.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -98,7 +101,7 @@ public class EditSubjectActivity extends AppCompatActivity {
                         pb.setVisibility(View.GONE);
                         mDatabaseRef.updateChildren(map);
                         Toast.makeText(EditSubjectActivity.this,
-                                "Updated Course Successfully!", Toast.LENGTH_SHORT).show();
+                                "Updated Subject Successfully!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(EditSubjectActivity.this, MainActivity.class));
                         finish();
                     }
@@ -107,7 +110,7 @@ public class EditSubjectActivity extends AppCompatActivity {
                     public void onCancelled(@NonNull DatabaseError error) {
                         pb.setVisibility(View.GONE);
                         Toast.makeText(EditSubjectActivity.this,
-                                "Failed to Update Course! Please Try again Later", Toast.LENGTH_SHORT).show();
+                                "Failed to Update Subject! Please Try again Later", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -117,10 +120,12 @@ public class EditSubjectActivity extends AppCompatActivity {
     }
 
     private void removeSubject() {
-        mDatabaseRef.removeValue();
-        Toast.makeText(this, "Course Deleted Successfully!", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(EditSubjectActivity.this, MainActivity.class));
-        finish();
+        mDatabaseRef.removeValue().addOnSuccessListener(v -> {
+            Toast.makeText(EditSubjectActivity.this, "Subject Deleted Successfully!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(EditSubjectActivity.this, MainActivity.class));
+            finish();
+        });
+
     }
 
 }

@@ -72,27 +72,29 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/txt_current_status"
         android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_below="@id/txt_current_status">
+        android:weightSum="2">
+
         <Button
+            android:id="@+id/btn_edit_subject"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_margin="4dp"
+            android:layout_weight="1"
             android:text="Edit Subject"
             android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:id="@+id/btn_edit_subject"/>
+            android:textColor="@color/white" />
+
         <Button
+            android:id="@+id/btn_view_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_margin="4dp"
+            android:layout_weight="1"
             android:text="View Status"
             android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:id="@+id/btn_view_status"/>
+            android:textColor="@color/white" />
     </LinearLayout>
 
 

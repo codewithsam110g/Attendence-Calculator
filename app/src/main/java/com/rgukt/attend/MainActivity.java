@@ -39,6 +39,8 @@ import com.rgukt.attend.utils.SubjectViewAdapter;
 import com.rgukt.attend.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements SubjectViewAdapter.SubjectViewClickInterface {
 
@@ -117,6 +119,8 @@ public class MainActivity extends AppCompatActivity implements SubjectViewAdapte
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 pb.setVisibility(View.GONE);
+                SubjectData dat = snapshot.getValue(SubjectData.class);
+                viewData.remove(Utils.toSubjectViewData(dat));
                 adapter.notifyDataSetChanged();
 
                 if (viewData.size() == 0) {
@@ -179,9 +183,10 @@ public class MainActivity extends AppCompatActivity implements SubjectViewAdapte
         present.setText("You are Present for: " + sub.getPresentClasses() + " classes");
         absent.setText("You are Absent for: " + (sub.getTotalClasses() - sub.getPresentClasses()) + " classes");
         total.setText("Total Classes Conducted: " + sub.getPresentClasses());
-        status.setText("Your Current Percentage is: " + dat.getPresentPercent() + "%");
+        status.setText("Your Current Percentage is: " + dat.getCurrentPresentPercentage() + "%");
 
         edit.setOnClickListener(v -> {
+            bottomSheetDialog.dismiss();
             Intent i = new Intent(MainActivity.this, EditSubjectActivity.class);
             i.putExtra("subject", sub);
             startActivity(i);
@@ -192,10 +197,10 @@ public class MainActivity extends AppCompatActivity implements SubjectViewAdapte
             bottomSheetDialog.dismiss();
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             String res;
-            float val = (Float.parseFloat(dat.getPresentPercent()) - sub.getRecPercentage());
+            float val = (Float.parseFloat(dat.getCurrentPresentPercentage()) - sub.getRecommendedPercentage());
             int x = sub.getPresentClasses();
             int y = sub.getTotalClasses();
-            float sp = sub.getRecPercentage();
+            float sp = sub.getRecommendedPercentage();
             float days;
             if (val > 0) {
                 days = (100 * x / sp) - y;
@@ -238,10 +243,16 @@ public class MainActivity extends AppCompatActivity implements SubjectViewAdapte
         count++;
         if (count < countLimit) {
             Toast.makeText(this, "Press back one more time to Exit", Toast.LENGTH_SHORT).show();
-        } else if (count == countLimit) {
-            super.onBackPressed();
         }
-        //TODO: add timer to close so that it checks if user wants to close actually to prevent accidental close
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (count == countLimit) {
+                    MainActivity.super.onBackPressed();
+                } else count = 0;
+            }
+        }, 1000);
     }
 
     @Override
@@ -271,7 +282,11 @@ public class MainActivity extends AppCompatActivity implements SubjectViewAdapte
                 finish();
                 return true;
             }
-            case R.id.time_table:{
+            case R.id.attendence: {
+                //startActivity(new Intent(MainActivity.this, ));
+                return true;
+            }
+            case R.id.time_table: {
                 startActivity(new Intent(MainActivity.this, TimeTableActivity.class));
                 finish();
                 return true;

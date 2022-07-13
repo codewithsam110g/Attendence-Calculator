@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ac_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,10 +16,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
             android:background="@color/blue_shade_2"
             android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:layout_marginBottom="3dp">
+            android:paddingBottom="15dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -82,8 +81,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_courses"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent" />
     </LinearLayout>
 
     <ProgressBar
@@ -103,8 +101,8 @@
         android:text="Looks like there is no data to show.\nPlease add Some Subjects to show!"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:visibility="gone"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_fab"

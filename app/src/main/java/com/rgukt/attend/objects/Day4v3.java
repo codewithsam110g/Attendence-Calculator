@@ -1,7 +1,5 @@
 package com.rgukt.attend.objects;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.HashMap;
 
 public class Day4v3 {

@@ -18,8 +18,8 @@ public class SubjectViewData implements Parcelable {
     };
     private String subjectName;
     private String presentRatio;
-    private String presentPercent;
-    private String recPercent;
+    private String currentPresentPercentage;
+    private String recommendedPercentage;
     private String subjectId;
 
     public SubjectViewData() {
@@ -29,16 +29,16 @@ public class SubjectViewData implements Parcelable {
     public SubjectViewData(String subjectName, String presentRatio, String presentPercent, String recPercent, String subjectId) {
         this.subjectName = subjectName;
         this.presentRatio = presentRatio;
-        this.presentPercent = presentPercent;
-        this.recPercent = recPercent;
+        this.currentPresentPercentage = presentPercent;
+        this.recommendedPercentage = recPercent;
         this.subjectId = subjectId;
     }
 
     protected SubjectViewData(Parcel in) {
         subjectName = in.readString();
         presentRatio = in.readString();
-        presentPercent = in.readString();
-        recPercent = in.readString();
+        currentPresentPercentage = in.readString();
+        recommendedPercentage = in.readString();
         subjectId = in.readString();
     }
 
@@ -58,12 +58,12 @@ public class SubjectViewData implements Parcelable {
         this.presentRatio = presentRatio;
     }
 
-    public String getPresentPercent() {
-        return presentPercent;
+    public String getCurrentPresentPercentage() {
+        return currentPresentPercentage;
     }
 
-    public void setPresentPercent(String presentPercent) {
-        this.presentPercent = presentPercent;
+    public void setCurrentPresentPercentage(String currentPresentPercentage) {
+        this.currentPresentPercentage = currentPresentPercentage;
     }
 
     public String getSubjectId() {
@@ -74,12 +74,12 @@ public class SubjectViewData implements Parcelable {
         this.subjectId = subjectId;
     }
 
-    public String getRecPercent() {
-        return recPercent;
+    public String getRecommendedPercentage() {
+        return recommendedPercentage;
     }
 
-    public void setRecPercent(String recPercent) {
-        this.recPercent = recPercent;
+    public void setRecommendedPercentage(String recommendedPercentage) {
+        this.recommendedPercentage = recommendedPercentage;
     }
 
     @Override
@@ -91,8 +91,8 @@ public class SubjectViewData implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(subjectName);
         dest.writeString(presentRatio);
-        dest.writeString(presentPercent);
-        dest.writeString(recPercent);
+        dest.writeString(currentPresentPercentage);
+        dest.writeString(recommendedPercentage);
         dest.writeString(subjectId);
     }
 }

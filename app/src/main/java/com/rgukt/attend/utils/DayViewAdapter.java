@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,7 +24,7 @@ public class DayViewAdapter extends RecyclerView.Adapter<DayViewAdapter.ViewHold
         this.context = context;
     }
 
-    public void SetDataArray(ArrayList<Day4v3> days){
+    public void SetDataArray(ArrayList<Day4v3> days) {
         this.viewDataArray = days;
         this.notifyDataSetChanged();
     }
@@ -42,13 +40,13 @@ public class DayViewAdapter extends RecyclerView.Adapter<DayViewAdapter.ViewHold
     public void onBindViewHolder(@NonNull DayViewAdapter.ViewHolder holder, int position) {
         Day4v3 day = viewDataArray.get(position);
         holder.day.setText("Day: " + day.getDay());
-        holder.p1.setText("Period 1: "+day.getMorningPeriods().get("p1"));
-        holder.p2.setText("Period 2: "+day.getMorningPeriods().get("p2"));
-        holder.p3.setText("Period 3: "+day.getMorningPeriods().get("p3"));
-        holder.p4.setText("Period 4: "+day.getMorningPeriods().get("p4"));
-        holder.p5.setText("Period 5: "+day.getAfterNoonPeriods().get("p1"));
-        holder.p6.setText("Period 6: "+day.getAfterNoonPeriods().get("p2"));
-        holder.p7.setText("Period 7: "+day.getAfterNoonPeriods().get("p3"));
+        holder.p1.setText("Period 1: " + day.getMorningPeriods().get("p1"));
+        holder.p2.setText("Period 2: " + day.getMorningPeriods().get("p2"));
+        holder.p3.setText("Period 3: " + day.getMorningPeriods().get("p3"));
+        holder.p4.setText("Period 4: " + day.getMorningPeriods().get("p4"));
+        holder.p5.setText("Period 5: " + day.getAfterNoonPeriods().get("p1"));
+        holder.p6.setText("Period 6: " + day.getAfterNoonPeriods().get("p2"));
+        holder.p7.setText("Period 7: " + day.getAfterNoonPeriods().get("p3"));
     }
 
 
@@ -59,7 +57,8 @@ public class DayViewAdapter extends RecyclerView.Adapter<DayViewAdapter.ViewHold
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView day, p1, p2, p3, p4, p5, p6 ,p7;
+        TextView day, p1, p2, p3, p4, p5, p6, p7;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             day = itemView.findViewById(R.id.txt_day);

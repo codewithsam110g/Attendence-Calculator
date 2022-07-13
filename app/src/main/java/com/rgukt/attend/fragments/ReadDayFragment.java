@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,11 +19,6 @@ import java.util.HashMap;
 
 public class ReadDayFragment extends Fragment {
 
-    private ArrayList<Day4v3> dayList;
-    private DatabaseHandler4v3 db;
-    private DayViewAdapter adapter;
-    private RecyclerView rv;
-
     String[] days = {
             "monday",
             "tuesday",
@@ -34,6 +27,10 @@ public class ReadDayFragment extends Fragment {
             "friday",
             "saturday"
     };
+    private ArrayList<Day4v3> dayList;
+    private DatabaseHandler4v3 db;
+    private DayViewAdapter adapter;
+    private RecyclerView rv;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +53,7 @@ public class ReadDayFragment extends Fragment {
         return view;
     }
 
-    private ArrayList<Day4v3> getDays(HashMap<String, Day4v3> d){
+    private ArrayList<Day4v3> getDays(HashMap<String, Day4v3> d) {
         return new ArrayList<>(d.values());
     }
 

@@ -85,11 +85,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="18dp"
             android:layout_marginBottom="30dp"
             android:hint="Enter Recommended Percentage"
             android:padding="5dp"
-            android:layout_marginTop="30dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white">
 

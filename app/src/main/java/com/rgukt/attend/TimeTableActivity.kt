@@ -8,32 +8,39 @@ import com.google.android.material.tabs.TabLayout
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
-import kotlinx.android.synthetic.main.activity_time_table.*
+import com.rgukt.attend.databinding.ActivityTimeTableBinding
 
 class TimeTableActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityTimeTableBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         FirebaseApp.initializeApp(/*context=*/this)
         val firebaseAppCheck = FirebaseAppCheck.getInstance()
         firebaseAppCheck.installAppCheckProviderFactory(
             SafetyNetAppCheckProviderFactory.getInstance()
         )
-        setContentView(R.layout.activity_time_table)
+
+        binding = ActivityTimeTableBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         setUpTabBar()
     }
 
     private fun setUpTabBar() {
-        val adapter = TabPageAdapter(this, tabLayout.tabCount)
-        viewPager.adapter = adapter
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        val adapter = TabPageAdapter(this, binding.tabLayout.tabCount)
+        binding.viewPager.adapter = adapter
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                tabLayout.selectTab(tabLayout.getTabAt(position))
+                binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
             }
         })
 
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                viewPager.currentItem = tab.position
+                binding.viewPager.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}

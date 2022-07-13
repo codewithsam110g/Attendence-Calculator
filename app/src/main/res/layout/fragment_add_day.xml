@@ -1,206 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blue_shade_1"
-    tools:context=".fragments.AddDayFragment">
+    tools:context=".fragments.Add_Update_DayFragment">
 
-    <LinearLayout
-        android:id="@+id/ll_add"
+    <ScrollView
+        android:id="@+id/sv_add"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30sp"
-            android:gravity="center"
-            android:text="Add Periods to Required Day"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/spn_days"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:minHeight="48dp"
-            android:padding="8dp"
-            android:spinnerMode="dropdown" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="Period 1"
-            android:padding="5dp"
-            android:textColorHint="@color/white"
-            app:hintTextColor="@color/white">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_period_1"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:inputType="text"
+                android:layout_marginTop="30sp"
+                android:gravity="center"
+                android:text="Add to or Update Periods of Required Day"
                 android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:textSize="18sp" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="Period 2"
-            android:padding="5dp"
-            android:textColorHint="@color/white"
-            app:hintTextColor="@color/white">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_period_2"
+            <Spinner
+                android:id="@+id/spn_days"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:spinnerMode="dropdown" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="Period 3"
-            android:padding="5dp"
-            android:textColorHint="@color/white"
-            app:hintTextColor="@color/white">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_period_3"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:textColor="@color/white"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="Period 1"
+                android:padding="5dp"
                 android:textColorHint="@color/white"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                app:hintTextColor="@color/white">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="Period 4"
-            android:padding="5dp"
-            android:textColorHint="@color/white"
-            app:hintTextColor="@color/white">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_period_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_period_4"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:textColor="@color/white"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="Period 2"
+                android:padding="5dp"
                 android:textColorHint="@color/white"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                app:hintTextColor="@color/white">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="Period 5"
-            android:padding="5dp"
-            android:textColorHint="@color/white"
-            app:hintTextColor="@color/white">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_period_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_period_5"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:textColor="@color/white"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="Period 3"
+                android:padding="5dp"
                 android:textColorHint="@color/white"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                app:hintTextColor="@color/white">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="Period 6"
-            android:padding="5dp"
-            android:textColorHint="@color/white"
-            app:hintTextColor="@color/white">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_period_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_period_6"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:textColor="@color/white"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="Period 4"
+                android:padding="5dp"
                 android:textColorHint="@color/white"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                app:hintTextColor="@color/white">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="Period 7"
-            android:padding="5dp"
-            android:textColorHint="@color/white"
-            app:hintTextColor="@color/white">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_period_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_period_7"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:textColor="@color/white"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="Period 5"
+                android:padding="5dp"
                 android:textColorHint="@color/white"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                app:hintTextColor="@color/white">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_period_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/btn_add_day"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_weight="1"
-            android:background="@drawable/custom_button_back"
-            android:padding="4dp"
-            android:text="Add Day"
-            android:textAllCaps="false"
-            android:textColor="@color/white" />
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="Period 6"
+                android:padding="5dp"
+                android:textColorHint="@color/white"
+                app:hintTextColor="@color/white">
 
-    </LinearLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_period_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="Period 7"
+                android:padding="5dp"
+                android:textColorHint="@color/white"
+                app:hintTextColor="@color/white">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_period_7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btn_add_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/custom_button_back"
+                android:padding="4dp"
+                android:text="Add / Update\nDay"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+    </ScrollView>
 
     <ProgressBar
         android:id="@+id/pb_loading"
@@ -211,5 +215,4 @@
         android:indeterminateDrawable="@drawable/progress_back"
         android:visibility="gone" />
 
-
-</FrameLayout>
+</RelativeLayout>

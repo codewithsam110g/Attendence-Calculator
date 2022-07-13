@@ -41,8 +41,8 @@ public class SubjectViewAdapter extends RecyclerView.Adapter<SubjectViewAdapter.
         SubjectViewData dat = viewDataArray.get(position);
         holder.name.setText(dat.getSubjectName());
         holder.ratio.setText(dat.getPresentRatio());
-        holder.percent.setText(dat.getPresentPercent() + "%");
-        holder.recPercent.setText(dat.getRecPercent() + "%");
+        holder.percent.setText(dat.getCurrentPresentPercentage() + "%");
+        holder.recPercent.setText(dat.getRecommendedPercentage() + "%");
         setAnimation(holder.itemView, position);
         holder.itemView.setOnClickListener(v -> {
             subjectViewClickInterface.onSubjectClick(position);

@@ -3,6 +3,8 @@ package com.rgukt.attend.utils;
 import com.rgukt.attend.objects.SubjectData;
 import com.rgukt.attend.objects.SubjectViewData;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.DecimalFormat;
 
 public class Utils {
@@ -12,7 +14,7 @@ public class Utils {
     public static SubjectData toSubjectData(SubjectViewData subView) {
         SubjectData dat = new SubjectData();
 
-        dat.setSubjectName(subView.getSubjectName());
+        dat.setSubjectName(StringUtils.capitalize(subView.getSubjectName()));
 
         String s = subView.getPresentRatio().trim();
         String[] val = s.split("/");
@@ -21,8 +23,8 @@ public class Utils {
 
         dat.setPresentClasses(present);
         dat.setTotalClasses(total);
-        dat.setSubjectId(subView.getSubjectId());
-        dat.setRecPercentage(Integer.parseInt(subView.getRecPercent()));
+        dat.setSubjectId(StringUtils.capitalize(subView.getSubjectId()));
+        dat.setRecommendedPercentage(Integer.parseInt(subView.getRecommendedPercentage()));
 
         return dat;
     }
@@ -36,9 +38,9 @@ public class Utils {
         float percent = ((float) sub.getPresentClasses() / (float) ((sub.getTotalClasses() != 0) ? sub.getTotalClasses() : 1)) * 100;
 
         viewDat.setPresentRatio(presentRatio);
-        viewDat.setPresentPercent(df.format(percent));
-        viewDat.setSubjectId(sub.getSubjectId());
-        viewDat.setRecPercent(String.valueOf(sub.getRecPercentage()));
+        viewDat.setCurrentPresentPercentage(df.format(percent));
+        viewDat.setSubjectId(StringUtils.capitalize(sub.getSubjectId()));
+        viewDat.setRecommendedPercentage(StringUtils.capitalize(String.valueOf(sub.getRecommendedPercentage())));
         return viewDat;
     }
 
