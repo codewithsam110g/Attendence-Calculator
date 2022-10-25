@@ -33,20 +33,19 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAppCheck.installAppCheckProviderFactory(
                 SafetyNetAppCheckProviderFactory.getInstance());
 
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
-        // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null) {
+        if (account != null && account.getEmail().contains("rguktn.ac.in")) {
             Toast.makeText(this, "Hello " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
+        } else {
+            Toast.makeText(this, "Please Login with RGUKT 0Mail", Toast.LENGTH_SHORT).show();
         }
 
         SignInButton signInButton = findViewById(R.id.sign_in_button);
@@ -70,10 +69,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == 1) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
@@ -89,8 +85,6 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.d("Message=", e.toString());
             Toast.makeText(this, "Some Error Occurred! Please Try again", Toast.LENGTH_SHORT).show();
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();

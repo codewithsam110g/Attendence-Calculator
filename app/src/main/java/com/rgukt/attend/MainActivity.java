@@ -283,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements SubjectViewAdapte
                 return true;
             }
             case R.id.attendence: {
-                //startActivity(new Intent(MainActivity.this, ));
+                startActivity(new Intent(MainActivity.this, AttendenceActivity.class));
                 return true;
             }
             case R.id.time_table: {

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue_shade_1"
+    tools:context=".AttendenceActivity">
+
+    <TextView
+        android:id="@+id/t1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:padding="4dp"
+        android:text="Select How are You Present!"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/t2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/t1"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="10dp"
+        android:text="Fullday: "
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <RadioGroup
+        android:id="@+id/rg1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/t2"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/t2"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbfdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onRadioButtonClicked"
+            android:text="  Present"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/rbfda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onRadioButtonClicked"
+            android:text="  Absent"
+            android:textColor="@color/white" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/t3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rg1"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:text="HalfDay Present: "
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <RadioGroup
+        android:id="@+id/rg2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/t3"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/t2"
+        android:orientation="horizontal">
+
+
+        <RadioButton
+            android:id="@+id/rbhdmp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onRadioButtonClicked"
+            android:text="  Morning"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/rbhdap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onRadioButtonClicked"
+            android:text="  Afternoon"
+            android:textColor="@color/white" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/txt_custom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rg2"
+        android:layout_margin="50dp"
+        android:gravity="center"
+        android:text="Click Here to select Custom"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txt_custom"
+        android:layout_centerInParent="true"
+        android:background="@drawable/custom_button_back"
+        android:padding="4dp"
+        android:text="     Confirm!    "
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+
+
+</RelativeLayout>
